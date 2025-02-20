@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Workers Example</title>
+  </head>
+  <body>
+    <h1>Web Workers Example</h1>
+    <label for="fib-input">Enter a number for Fibonacci calculation:</label>
+    <input type="number" id="fib-input" value="40" />
+    <button id="calculate-btn" >Calculate</button>
+    <p id="result">Result:</p>
+
+    <script>
+      // Check if Web Workers are supported
+      if (window.Worker) {
+        const worker = new Worker("worker.js"); // Load the worker script
+
+        const input = document.getElementById("fib-input");
+        const button = document.getElementById("calculate-btn");
+        const result = document.getElementById("result");
+
+        button.addEventListener("click", () => {
+          const number = parseInt(input.value, 10);
+
+          // Send the input number to the worker
+          worker.postMessage(number);
+
+          // Display a loading message
+          result.textContent = "Calculating...";
+
+          // Listen for messages from the worker
+          worker.onmessage = function (event) {
+            result.textContent = `Result: ${event.data}`;
+          };
+
+          worker.onerror = function (error) {
+            console.error("Worker Error:", error);
+            result.textContent = "An error occurred.";
+          };
+        });
+      } else {
+        alert("Web Workers are not supported in your browser.");
+      }
+    </script>
+  </body>
+</html>
