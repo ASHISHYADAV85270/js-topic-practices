@@ -4,3 +4,6 @@ ShortPolling/node_modules
 ShortPolling/package-lock.json
 websocket/node_modules
 websocket/package-lock.json
+node_modules/
+package-lock.json
+node_modules
