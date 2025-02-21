@@ -17,6 +17,7 @@ Function.prototype.myCall = function (context, ...args) {
 
   context.referenceFn = this; // it will store the reference of the function that is being called
   context.referenceFn(...args);
+  delete context.referenceFn;
 };
 
 // printData.myCall(userData, 20, "A+");
