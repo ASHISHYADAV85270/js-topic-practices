@@ -12,17 +12,22 @@ function printData(age, bloodGroup) {
 // b1();
 
 // const b1 = printData.bind(userData, 20);
-// b1("A+");
+// console.log(userData);
 
 Function.prototype.myBind = function (context, ...args) {
   if (typeof this !== "function") {
     throw Error(`${this} is not callable`);
   }
-  context.referenceFn = this;
+
+  const referenceFn = this;
   return function (...otherParams) {
+    context.referenceFn = referenceFn;
     context.referenceFn(...args, ...otherParams);
+    delete context.referenceFn;
   };
 };
 
 const b1 = printData.myBind(userData, 20);
+console.log(userData);
 b1("A+");
+b1(20, "A+");
