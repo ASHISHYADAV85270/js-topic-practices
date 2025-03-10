@@ -47,16 +47,19 @@
       if (isDeleteBtnClicked) {
         const noteIndex = parseInt(event.target.dataset.index, 10);
         notesData.splice(noteIndex, 1);
-        sessionStorage.setItem("notesData", JSON.stringify(notesData));
+        updateSessionStorage();
         checkData();
       }
     });
 
+    function updateSessionStorage() {
+      sessionStorage.setItem("notesData", JSON.stringify(notesData));
+    }
     function updateNotes() {
       const currValue = nameInput.value.trim();
       if (currValue.length > 0) {
         notesData.push(currValue);
-        sessionStorage.setItem("notesData", JSON.stringify(notesData));
+        updateSessionStorage();
         renderData(currValue, notesData.length);
         nameInput.value = "";
       }
