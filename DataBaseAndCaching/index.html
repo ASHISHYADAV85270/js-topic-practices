@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LOCAL STORAGE</title>
+  </head>
+  <style>
+    body.light {
+      background-color: white;
+      color: black;
+    }
+
+    body.dark {
+      background-color: black;
+      color: white;
+    }
+
+    .parent {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+  </style>
+  <body>
+    <div class="parent">
+      <h1>LOCAL STORAGE</h1>
+      <button onclick="toggleMode()">Toggle Me</button>
+    </div>
+  </body>
+  <script>
+    function toggleMode() {
+      const body = document.body;
+      const currentMode = localStorage.getItem("mode");
+      const newMode = currentMode === "dark" ? "light" : "dark";
+      localStorage.setItem("mode", newMode);
+      body.classList.replace(currentMode, newMode);
+    }
+
+    function checkMode() {
+      const body = document.body;
+      const mode = localStorage.getItem("mode") || "light";
+      localStorage.setItem("mode", mode);
+      body.classList.add(mode);
+    }
+
+    checkMode();
+  </script>
+</html>
