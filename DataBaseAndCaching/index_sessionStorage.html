@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Session Storage</title>
+  </head>
+  <style>
+    .my-notes {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 20px;
+      padding: 5px;
+      border: 1px solid #ccc;
+    }
+    .deleteBtn {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+  <body>
+    <h1>Session Storage</h1>
+    <input type="text" id="name" placeholder="Enter your notes" />
+    <button id="save-btn">Update Notes</button>
+    <div id="notes-container"></div>
+  </body>
+  <script>
+    const sessionsNotesData = sessionStorage.getItem("notesData") || "[]";
+    const notesData = JSON.parse(sessionsNotesData);
+
+    const saveBtn = document.getElementById("save-btn");
+    const nameInput = document.getElementById("name");
+    const notesContainer = document.getElementById("notes-container");
+
+    saveBtn.addEventListener("click", () => {
+      updateNotes();
+    });
+
+    // this concept is called event delegation
+    notesContainer.addEventListener("click", (event) => {
+      const isDeleteBtnClicked = event.target.classList.contains("deleteBtn");
+      if (isDeleteBtnClicked) {
+        const noteIndex = parseInt(event.target.dataset.index, 10);
+        notesData.splice(noteIndex, 1);
+        sessionStorage.setItem("notesData", JSON.stringify(notesData));
+        checkData();
+      }
+    });
+
+    function updateNotes() {
+      const currValue = nameInput.value.trim();
+      if (currValue.length > 0) {
+        notesData.push(currValue);
+        sessionStorage.setItem("notesData", JSON.stringify(notesData));
+        renderData(currValue, notesData.length);
+        nameInput.value = "";
+      }
+    }
+
+    function renderData(data, index) {
+      const noteWrapper = document.createElement("div");
+      noteWrapper.classList = "my-notes";
+      const currentData = document.createElement("p");
+      currentData.textContent = data;
+      const deleteBtn = document.createElement("button");
+      deleteBtn.classList = "deleteBtn";
+      deleteBtn.textContent = "Delete";
+      deleteBtn.setAttribute("data-index", index);
+      noteWrapper.appendChild(currentData);
+      noteWrapper.appendChild(deleteBtn);
+      notesContainer.appendChild(noteWrapper);
+    }
+
+    function checkData() {
+      notesContainer.innerHTML = "";
+      notesData.forEach((currNote, index) => {
+        renderData(currNote, index);
+      });
+    }
+    checkData();
+  </script>
+</html>
