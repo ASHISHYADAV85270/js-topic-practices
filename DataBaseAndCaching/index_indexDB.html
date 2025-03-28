@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index DB</title>
+</head>
+
+<body>
+    <button id="add" onclick="add()">Add</button>
+    <button id="get">Get</button>
+</body>
+
+<script>
+
+    function add() {
+        const request = indexedDB.open('test', 1);
+        let db;
+
+        request.onupgradeneeded = (event) => {
+            db = event.target.result;
+            if (!db.objectStoreNames.contains('users')) {
+                db.createObjectStore('users', { keyPath: 'id' });
+            }
+        }
+
+        request.onsuccess = (event) => {
+            db = event.target.result;
+            const transaction = db.transaction('users', 'readwrite');
+            const store = transaction.objectStore('users');
+            store.add({ id: 1, name: 'John' });
+        }
+    }
+</script>
+
+</html>

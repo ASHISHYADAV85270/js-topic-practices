@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COOKIE STORAGE</title>
+</head>
+
+<body>
+    <h1>Welcome to the Recommendation App!</h1>
+
+    <div id="preferences-container">
+        <h2>Set Your Preferences</h2>
+        <form id="preferences-form">
+            <label for="preferences">Choose your preferences:</label>
+            <select id="preferences" name="preferences">
+                <option value="movies">Movies</option>
+                <option value="books">Books</option>
+                <option value="music">Music</option>
+            </select>
+            <button type="button" onclick="setPreferences()">
+                Set Preferences
+            </button>
+        </form>
+    </div>
+
+    <div id="recommendations-container">
+        <h2>Personalized Recommendations</h2>
+        <p id="recommendations"></p>
+        <button onclick="logoutUser()">Logout</button>
+    </div>
+    <script>
+        function renderData() {
+            var preferences = document.cookie.split("; ").find(row => row.startsWith("preferences="))?.split("=")[1];
+            displayRecommendations(preferences);
+        }
+
+        // Function to get personalized recommendations based on user preferences
+        function getRecommendations(preferences) {
+            switch (preferences) {
+                case "movies":
+                    return "Check out the latest movies in theaters!";
+                case "books":
+                    return "Explore these must-read books!";
+                case "music":
+                    return "Listen to these trending music albums!";
+                default:
+                    return "No recommendations available.";
+            }
+        }
+
+        // Function to display personalized recommendations based on user preferences
+        function displayRecommendations(preferences) {
+            var recommendations = getRecommendations(preferences);
+            document.getElementById("recommendations").innerText = recommendations;
+        }
+
+        // Function to set user preferences and display recommendations
+        function setPreferences() {
+            var preferences = document.getElementById("preferences").value;
+            displayRecommendations(preferences);
+        }
+
+        window.onload = renderData;
+    </script>
+</body>
+
+</html>
