@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static vs Dynamic Caching - Full Demo</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f9fafb;
+            color: #1f2937;
+            padding: 2rem;
+            line-height: 1.75;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #111827;
+        }
+
+        h2 {
+            margin-top: 2.5rem;
+            font-size: 1.75rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.3rem;
+        }
+
+        h3 {
+            margin-top: 1.5rem;
+            font-size: 1.25rem;
+        }
+
+        p {
+            margin: 1rem 0;
+            max-width: 800px;
+        }
+
+        ul {
+            margin-left: 1.2rem;
+        }
+
+        ul li {
+            margin: 0.4rem 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        .badge-static {
+            background: #e0e7ff;
+            color: #4338ca;
+        }
+
+        .badge-dynamic {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .card {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info {
+            border-left: 5px solid #4F46E5;
+        }
+
+        .warning {
+            border-left: 5px solid #f59e0b;
+        }
+
+        .note {
+            border-left: 5px solid #10B981;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        th,
+        td {
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #f9fafb;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        code {
+            background: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .flow {
+            display: flex;
+            justify-content: space-between;
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        .flow span {
+            flex: 1;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .flow {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .flow span {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Demo */
+        .demo {
+            margin-top: 2rem;
+            background: #fdfdfd;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.03);
+        }
+
+        .demo p {
+            margin: 0.5rem 0;
+        }
+
+        .req {
+            padding: 0.5rem;
+            background: #f3f4f6;
+            border-radius: 6px;
+            margin: 0.3rem 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="./dog.gif" id="dog" />
+    <button id="dogButton">Click me To Fetch New Dog Gif</button>
+
+    <h1>🚀 Static vs Dynamic Caching</h1>
+    <p><em>Make your applications load faster and scale better using caching techniques.</em></p>
+
+    <h2>🟣 Static Caching <span class="badge badge-static">Static</span></h2>
+    <p>Static caching is applied to files that don't change often:</p>
+    <ul>
+        <li>Images</li>
+        <li>CSS files</li>
+        <li>JavaScript files</li>
+        <li>Fonts</li>
+    </ul>
+
+    <div class="card info">
+        <h3>✅ How Static Caching Works</h3>
+        <ul>
+            <li><strong>Browser Caching:</strong> Automatically caches static assets using headers like
+                <code>Cache-Control</code>, <code>ETag</code>.
+            </li>
+            <li><strong>Server/CDN Caching:</strong> Static assets are cached and served directly by CDNs or reverse
+                proxies.</li>
+        </ul>
+    </div>
+
+    <h2>🟠 Dynamic Caching <span class="badge badge-dynamic">Dynamic</span></h2>
+    <p>Dynamic caching is used when content is generated or updated frequently:</p>
+    <ul>
+        <li>API responses</li>
+        <li>Dynamic HTML pages</li>
+        <li>Personalized content</li>
+    </ul>
+
+    <div class="card note">
+        <h3>✅ How Dynamic Caching Works</h3>
+        <ul>
+            <li><strong>Server-side:</strong> Cached using Redis, Memcached, or CDN edge caching.</li>
+            <li><strong>Browser-side:</strong> ⚠️ Only cached if explicitly allowed using headers, usually disabled by
+                APIs to prevent stale data.</li>
+        </ul>
+    </div>
+
+    <h2>📊 Quick Comparison</h2>
+    <table>
+        <tr>
+            <th>Aspect</th>
+            <th>Static Caching</th>
+            <th>Dynamic Caching</th>
+        </tr>
+        <tr>
+            <td>Typical Content</td>
+            <td>Images, CSS, JS, Fonts</td>
+            <td>API responses, dynamic HTML</td>
+        </tr>
+        <tr>
+            <td>Browser Caching</td>
+            <td>✅ Common</td>
+            <td>⚠️ Rare (needs explicit headers)</td>
+        </tr>
+        <tr>
+            <td>Server/CDN Caching</td>
+            <td>✅ Common</td>
+            <td>✅ Common</td>
+        </tr>
+        <tr>
+            <td>Benefits</td>
+            <td>Improves load speed, reduces bandwidth</td>
+            <td>Reduces backend load, faster dynamic responses</td>
+        </tr>
+    </table>
+
+    <h2>⚡ Visual Flow</h2>
+    <div class="flow">
+        <span>Browser Cache</span> ⟷
+        <span>CDN / Server Cache</span> ⟷
+        <span>Origin Server</span>
+    </div>
+
+    <h2>🎯 Demo (Request Flow)</h2>
+    <div class="demo">
+        <p><strong>First Visit:</strong></p>
+        <div class="req">User requests <code>style.css</code> ➤ Goes to Server/CDN ➤ Gets response ➤ Browser caches it.
+        </div>
+
+        <p><strong>Second Visit:</strong></p>
+        <div class="req">User requests <code>style.css</code> ➤ Served directly from Browser Cache ➤ Instant load.</div>
+
+        <p><strong>Dynamic Content Example:</strong></p>
+        <div class="req">User requests <code>/api/user-info</code> ➤ Goes to Server ➤ Server may cache it temporarily.
+        </div>
+
+        <div class="req">Browser usually does <strong>NOT</strong> cache it unless instructed by cache headers.</div>
+    </div>
+
+    <h2>🛠️ Recommended Tools</h2>
+    <ul>
+        <li>Redis</li>
+        <li>Memcached</li>
+        <li>Varnish</li>
+        <li>Cloudflare / CloudFront</li>
+        <li>NGINX / Apache</li>
+    </ul>
+
+</body>
+<script>
+    const dogButton = document.getElementById('dogButton');
+    const dog = document.getElementById('dog');
+    dogButton.addEventListener('click', () => {
+        const timestamp = new Date().getTime();
+        // this will make the browser to fetch the new dog gif because the url is changed because of query parameters
+        dog.src = `./dog.gif?${timestamp}`;
+    });
+</script>
+
+</html>
