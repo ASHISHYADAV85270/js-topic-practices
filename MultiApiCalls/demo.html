@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API Call Methods</title>
+</head>
+
+<body>
+    <h2>API Call Demo</h2>
+    <button onclick="fetchApis(apiList, 'parallel')">Call All in Parallel</button>
+    <button onclick="fetchApis(apiList, 'sync')">Call Synchronously</button>
+    <button onclick="fetchApis(apiList, 'onebyone')">Call One by One</button>
+
+    <p id="status">Status: Idle</p>
+
+    <script>
+        // Replace with your actual API URLs
+        const apiList = [
+            'https://jsonplaceholder.typicode.com/posts/1',
+            'https://jsonplaceholder.typicode.com/posts/2',
+            'https://jsonplaceholder.typicode.com/posts/3',
+            'https://jsonplaceholder.typicode.com/posts/4',
+            'https://jsonplaceholder.typicode.com/posts/5',
+        ];
+
+        const statusEl = document.getElementById('status');
+
+        function setLoading(isLoading) {
+            statusEl.textContent = isLoading ? "Status: Loading..." : "Status: Done";
+        }
+
+        async function callAllApisInParallel(apiList) {
+            setLoading(true);
+            try {
+                const responses = await Promise.all(apiList.map(url => fetch(url)));
+                const data = await Promise.all(responses.map(res => res.json()));
+                console.log("Parallel results:", data);
+            } catch (err) {
+                console.error("Parallel error:", err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        async function callApisSynchronously(apiList) {
+            setLoading(true);
+            const results = [];
+            try {
+                for (let i = 0; i < apiList.length; i++) {
+                    const res = await fetch(apiList[i]);
+                    const data = await res.json();
+                    results.push(data);
+                }
+                console.log("Synchronous results:", results);
+            } catch (err) {
+                console.error("Synchronous error:", err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        async function callApisOneByOne(apiList) {
+            setLoading(true);
+            const results = [];
+            try {
+                for (const url of apiList) {
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    results.push(data);
+                }
+                console.log("One-by-one results:", results);
+            } catch (err) {
+                console.error("One-by-one error:", err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        async function fetchApis(apiList, mode = 'parallel') {
+            switch (mode) {
+                case 'parallel':
+                    await callAllApisInParallel(apiList);
+                    break;
+                case 'sync':
+                    await callApisSynchronously(apiList);
+                    break;
+                case 'onebyone':
+                    await callApisOneByOne(apiList);
+                    break;
+                default:
+                    alert("Unknown mode: " + mode);
+            }
+        }
+    </script>
+</body>
+
+</html>
