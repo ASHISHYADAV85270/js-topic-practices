@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutation Observer</title>
+</head>
+<style>
+    #container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .container1 {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+    }
+
+    .container2 {
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+    }
+
+    .container3 {
+        width: 100px;
+        height: 100px;
+        background-color: green;
+    }
+</style>
+
+<body>
+    <div id="container">
+        <div class="container1" contenteditable="true">Container 1</div>
+        <div class="otherdiv">
+            <div>Inner Div</div>
+        </div>
+        <div class="container2" contenteditable="true">Container 2</div>
+        <div class="container3" contenteditable="true">Container 3</div>
+    </div>
+    <button id="updateClass" onclick="updateClass()">Update Class </button>
+    <button id="updateContent" onclick="updateContent()">Update Content </button>
+    <button id="delete" onclick="handleDeleteDiv()">Delete Container </button>
+    <button id="deleteInnerDiv" onclick="handleDeleteInnerDiv()">Delete Inner Div </button>
+
+</body>
+
+<script>
+    const container = document.getElementById("container");
+    const innerDiv = document.querySelector(".otherdiv");
+    function handleDeleteDiv() {
+        const lastElement = container.lastElementChild;
+        if (lastElement) {
+            container.removeChild(lastElement);
+        }
+    }
+
+    function handleDeleteInnerDiv() {
+        const lastElement = innerDiv.lastElementChild;
+        if (lastElement) {
+            innerDiv.removeChild(lastElement);
+        }
+    }
+
+    function updateClass() {
+        const firstChild = container.firstElementChild;
+        if (firstChild) {
+            firstChild.classList.add("dummyclass");
+        }
+    }
+
+    function updateContent() {
+        const firstChild = container.firstElementChild;
+        if (firstChild) {
+            firstChild.textContent = "Updated Content";
+        }
+    }
+
+    let observer = new MutationObserver((data) => {
+        console.log("Mutation Observer", data);
+    })
+
+    observer.observe(container, {
+        childList: true, subtree: true, attributes: true,
+        characterDataOldValue: true,
+    })
+</script>
+
+</html>
